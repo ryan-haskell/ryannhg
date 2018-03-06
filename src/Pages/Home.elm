@@ -22,7 +22,7 @@ view =
                 { header = "Hi, I'm Ryan."
                 , subheader = "And I like coding things."
                 , cta =
-                    { label = "Prove it, nerd!"
+                    { label = "Prove it, you nerd!"
                     , link = "#/projects"
                     }
                 }
@@ -31,11 +31,11 @@ view =
                 , posts =
                     [ Types.Post
                         "Elm is Awesome, and So Are You"
-                        "/thoughts/elm-is-awesome-and-so-are-you"
+                        "#/thoughts/elm-is-awesome-and-so-are-you"
                         "Monday - March 5th, 2018"
                     , Types.Post
                         "Making Promises Worth Keeping"
-                        "/thoughts/making-promises-worth-keeping"
+                        "#/thoughts/making-promises-worth-keeping"
                         "Monday - March 3rd, 2018"
                     ]
                 }

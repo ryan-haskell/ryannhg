@@ -31,11 +31,11 @@ navbar =
                     , alignRight
                     ]
                     [ link "#/about" <|
-                        el Styles.Link [] (text "about")
+                        el Styles.Link [] (text "about.")
                     , link "#/projects" <|
-                        el Styles.Link [] (text "projects")
+                        el Styles.Link [] (text "projects.")
                     , link "#/thoughts" <|
-                        el Styles.Link [] (text "thoughts")
+                        el Styles.Link [] (text "thoughts.")
                     ]
                 ]
             ]

@@ -42,10 +42,7 @@ stylesheet =
             , Font.weight 300
             ]
         , style Link
-            (linkStyles
-                ++ [ Font.underline
-                   ]
-            )
+            (linkStyles)
         , style Brand
             (linkStyles
                 ++ [ Font.size 28
