@@ -79,7 +79,7 @@ stylesheet =
             , Border.rounded 4
             , Font.size 18
             , hover
-                [ Color.background <| Color.rgba 0 150 200 0.8
+                [ Color.background <| Color.rgb 30 30 30
                 ]
             ]
         , style Section
