@@ -1,21 +1,57 @@
-module Elements exposing (..)
+module Elements
+    exposing
+        ( hero
+        , heroWithLink
+        , navbar
+        , footer
+        , container
+        , blogListing
+        )
 
 import Element exposing (..)
 import Element.Attributes exposing (..)
 import Styles exposing (El)
+import Types
 
 
 navbar : El msg
 navbar =
-    el Styles.Header [] <|
+    header Styles.Header [] <|
         container
             [ row Styles.None
                 [ width fill
                 , verticalCenter
                 , paddingXY 0 12
                 ]
-                [ link "/" <|
-                    el Styles.Brand [ paddingRight 0 ] (text "ryan")
+                [ link "#/" <|
+                    el Styles.Brand [ paddingRight 0 ] (text "ryan haskell-glatz.")
+                , row Styles.None
+                    [ width fill
+                    , spacing 12
+                    , alignRight
+                    ]
+                    [ link "#/about" <|
+                        el Styles.Link [] (text "about")
+                    , link "#/projects" <|
+                        el Styles.Link [] (text "projects")
+                    , link "#/thoughts" <|
+                        el Styles.Link [] (text "thoughts")
+                    ]
+                ]
+            ]
+
+
+footer : El msg
+footer =
+    Element.footer Styles.Footer [] <|
+        container
+            [ row Styles.None
+                [ width fill
+                , verticalCenter
+                , paddingTop 24
+                , paddingBottom 32
+                ]
+                [ el Styles.Copyright [ paddingRight 0 ] (text "Ryan Haskell-Glatz, 2018")
                 , row Styles.None
                     [ width fill
                     , spacing 12
@@ -30,11 +66,62 @@ navbar =
             ]
 
 
+hero_ : List (El msg) -> { a | header : String, subheader : String } -> El msg
+hero_ otherStuff { header, subheader } =
+    column Styles.Hero
+        [ alignLeft, width fill, paddingXY 0 128 ]
+        [ container
+            ([ el Styles.HeroHeader [] (text header)
+             , el Styles.HeroSubheader [ paddingTop 2, paddingLeft 2 ] (text subheader)
+             ]
+                ++ otherStuff
+            )
+        ]
+
+
+hero : { header : String, subheader : String } -> El msg
+hero =
+    hero_ []
+
+
+heroWithLink : { header : String, subheader : String, cta : { link : String, label : String } } -> El msg
+heroWithLink model =
+    hero_
+        [ row Styles.None
+            [ paddingTop 24 ]
+            [ link model.cta.link <|
+                el Styles.Button [ paddingXY 12 8 ] (text model.cta.label)
+            ]
+        ]
+        model
+
+
 container : List (El msg) -> El msg
 container innerContent =
     row Styles.None
-        [ width fill, center, paddingXY 16 0 ]
+        [ width fill, center, paddingXY 24 0 ]
         [ column Styles.None
             [ width fill, maxWidth (px 780) ]
             innerContent
         ]
+
+
+blogListing : { title : String, posts : List Types.Post } -> El msg
+blogListing { title, posts } =
+    el Styles.Section [ paddingXY 0 48 ] <|
+        container
+            [ el Styles.SectionHeader [] (text title)
+            , column Styles.None
+                [ paddingTop 12 ]
+                (List.map
+                    (\{ title, url, date } ->
+                        column Styles.Listing
+                            [ paddingXY 0 20 ]
+                            [ link url <|
+                                el Styles.ListingHeader [] (text title)
+                            , el Styles.ListingSubheader [ paddingTop 6 ] (text date)
+                            ]
+                    )
+                    posts
+                )
+            ]
