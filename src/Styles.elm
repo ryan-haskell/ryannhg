@@ -77,6 +77,7 @@ stylesheet =
             , Color.text <| Color.white
             , Font.weight 400
             , Border.rounded 4
+            , Font.size 18
             , hover
                 [ Color.background <| Color.rgba 0 150 200 0.8
                 ]

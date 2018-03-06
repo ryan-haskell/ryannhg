@@ -90,7 +90,7 @@ heroWithLink model =
         [ row Styles.None
             [ paddingTop 24 ]
             [ link model.cta.link <|
-                el Styles.Button [ paddingXY 12 8 ] (text model.cta.label)
+                el Styles.Button [ paddingXY 16 8 ] (text model.cta.label)
             ]
         ]
         model
