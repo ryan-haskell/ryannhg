@@ -1,6 +1,10 @@
 module Pages.Home exposing (view, Msg)
 
-import Html exposing (..)
+import Html exposing (Html)
+import Element exposing (..)
+import Element.Attributes exposing (..)
+import Styles exposing (stylesheet)
+import Elements exposing (container, navbar)
 
 
 type Msg
@@ -9,4 +13,11 @@ type Msg
 
 view : Html Msg
 view =
-    div [] [ text "Homepage" ]
+    Element.layout stylesheet <|
+        column Styles.None
+            []
+            [ navbar
+            , container
+                [ el Styles.None [] (text "Homepage")
+                ]
+            ]
