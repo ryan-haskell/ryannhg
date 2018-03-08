@@ -66,25 +66,52 @@ footer =
             ]
 
 
-hero_ : List (El msg) -> { a | header : String, subheader : String } -> El msg
+hero_ : List (El msg) -> SomeHero a -> El msg
 hero_ otherStuff { header, subheader } =
     column Styles.Hero
         [ alignLeft, width fill, paddingXY 0 128 ]
         [ container
-            ([ el Styles.HeroHeader [] (text header)
-             , el Styles.HeroSubheader [ paddingTop 2, paddingLeft 2 ] (text subheader)
+            ([ h1 Styles.HeroHeader
+                []
+                (text header)
+             , h2 Styles.HeroSubheader
+                [ padding 2 ]
+                (text subheader)
              ]
                 ++ otherStuff
             )
         ]
 
 
-hero : { header : String, subheader : String } -> El msg
+type alias SomeHero a =
+    { a
+        | header : String
+        , subheader : String
+    }
+
+
+type alias HeroStuff =
+    { header : String
+    , subheader : String
+    }
+
+
+type alias HeroWithLinkStuff =
+    { header : String
+    , subheader : String
+    , cta :
+        { link : String
+        , label : String
+        }
+    }
+
+
+hero : HeroStuff -> El msg
 hero =
     hero_ []
 
 
-heroWithLink : { header : String, subheader : String, cta : { link : String, label : String } } -> El msg
+heroWithLink : HeroWithLinkStuff -> El msg
 heroWithLink model =
     hero_
         [ row Styles.None

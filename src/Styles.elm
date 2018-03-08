@@ -28,6 +28,21 @@ type Styles
     | Copyright
 
 
+darkGray : Color.Color
+darkGray =
+    Color.rgb 30 30 30
+
+
+lightGray : Color.Color
+lightGray =
+    Color.rgb 240 240 240
+
+
+blue : Color.Color
+blue =
+    Color.rgb 0 150 200
+
+
 stylesheet : Stylesheet
 stylesheet =
     Style.styleSheet
@@ -51,17 +66,17 @@ stylesheet =
             )
         , style Header
             [ Color.background Color.white
-            , Color.border <| Color.rgb 230 230 230
+            , Color.border <| lightGray
             , Border.bottom 1
             ]
         , style Footer
             [ Color.background Color.white
-            , Color.border <| Color.rgb 230 230 230
+            , Color.border lightGray
             , Border.top 1
             ]
         , style Hero
-            [ Color.background <| Color.rgb 240 240 240
-            , Color.text <| Color.rgb 30 30 30
+            [ Color.background lightGray
+            , Color.text darkGray
             ]
         , style HeroHeader
             [ Font.size 56
@@ -72,14 +87,14 @@ stylesheet =
             , Font.lowercase
             ]
         , style Button
-            [ Transition.all
-            , Color.background <| Color.rgb 0 150 200
-            , Color.text <| Color.white
-            , Font.weight 400
+            [ transition [ "background-color" ]
+            , Color.background blue
+            , Color.text Color.white
+            , Font.weight 600
             , Border.rounded 4
             , Font.size 18
             , hover
-                [ Color.background <| Color.rgb 30 30 30
+                [ Color.background darkGray
                 ]
             ]
         , style Section
@@ -98,7 +113,7 @@ stylesheet =
         , style ListingSubheader
             [ Font.size 24 ]
         , style Copyright
-            [ Color.text <| Color.rgb 30 30 30
+            [ Color.text darkGray
             , Font.size 20
             ]
         ]
@@ -106,19 +121,24 @@ stylesheet =
 
 linkActiveStyles : List (Style.Property class variation)
 linkActiveStyles =
-    [ Color.text <| Color.rgb 30 30 30
+    [ Color.text darkGray
     ]
+
+
+transition : List String -> Property class variation
+transition props =
+    Transition.transitions
+        [ { delay = 0
+          , duration = 300
+          , easing = "ease-in-out"
+          , props = props
+          }
+        ]
 
 
 linkStyles : List (Style.Property class variation)
 linkStyles =
-    [ Transition.transitions
-        [ { delay = 0
-          , duration = 300
-          , easing = "ease-in-out"
-          , props = [ "color" ]
-          }
-        ]
+    [ transition [ "color" ]
     , Color.text <| Color.rgb 0 150 200
     , Font.size 20
     , hover linkActiveStyles
