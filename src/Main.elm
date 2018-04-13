@@ -1,10 +1,16 @@
-module Main exposing (Model, Msg, update, view, subscriptions, init)
+module Main exposing (main)
 
-import Html exposing (..)
+import Element exposing (..)
+import Elements
 import Navigation exposing (Location)
-import Routes
 import Pages.Home
+import Pages.NotFound
+import Pages.Projects
+import Pages.Thoughts
+import Routes
+import Task
 import Types exposing (Page(..))
+import Window
 
 
 main : Program Never Model Msg
@@ -12,47 +18,64 @@ main =
     Navigation.program
         HandleLocation
         { init = init
-        , view = view
+        , view = \model -> layout [] (view model)
         , update = update
-        , subscriptions = subscriptions
+        , subscriptions = \model -> Window.resizes OnResize
         }
 
 
 type alias Model =
-    { page : Types.Page
+    { location : Location
+    , device : Maybe Element.Device
     }
 
 
 type Msg
     = HandleLocation Location
-    | HomepageMsg Pages.Home.Msg
+    | OnResize Window.Size
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         HandleLocation location ->
-            { model | page = Routes.page location } ! []
+            { model | location = location } ! []
 
-        HomepageMsg msg ->
-            model ! []
+        OnResize size ->
+            { model | device = Just <| Element.classifyDevice size } ! []
 
 
-view : Model -> Html Msg
+view : Model -> Element Msg
 view model =
-    case model.page of
+    case model.device of
+        Just device ->
+            column
+                Elements.pageStyles
+                [ Elements.navbar device (Routes.page model.location)
+                , el [ height fill, width fill ] (viewPage device model)
+                , Elements.footer device
+                ]
+
+        Nothing ->
+            empty
+
+
+viewPage : Device -> Model -> Element Msg
+viewPage device model =
+    case Routes.page model.location of
         Homepage ->
-            Html.map HomepageMsg Pages.Home.view
+            Pages.Home.view device
+
+        Projects ->
+            Pages.Projects.view device
+
+        Thoughts ->
+            Pages.Thoughts.view device
 
         NotFound ->
-            div [] [ text "Not found." ]
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
+            Pages.NotFound.view
 
 
 init : Location -> ( Model, Cmd Msg )
 init location =
-    ( Model (Routes.page location), Cmd.none )
+    ( Model location Nothing, Task.perform OnResize Window.size )

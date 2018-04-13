@@ -1,154 +1,181 @@
-module Elements
-    exposing
-        ( hero
-        , heroWithLink
-        , navbar
-        , footer
-        , container
-        , blogListing
-        )
+module Elements exposing (footer, hero, navbar, pageStyles)
 
+import Color exposing (Color)
 import Element exposing (..)
-import Element.Attributes exposing (..)
-import Styles exposing (El)
-import Types
+import Element.Background as Background
+import Element.Border as Border
+import Element.Font as Font
+import Types exposing (Page(..))
 
 
-navbar : El msg
-navbar =
-    header Styles.Header [] <|
-        container
-            [ row Styles.None
-                [ width fill
-                , verticalCenter
-                , paddingXY 0 12
-                ]
-                [ link "#/" <|
-                    el Styles.Brand [ paddingRight 0 ] (text "ryan haskell-glatz.")
-                , row Styles.None
-                    [ width fill
-                    , spacing 12
-                    , alignRight
-                    ]
-                    [ link "#/about" <|
-                        el Styles.Link [] (text "about.")
-                    , link "#/projects" <|
-                        el Styles.Link [] (text "projects.")
-                    , link "#/thoughts" <|
-                        el Styles.Link [] (text "thoughts.")
-                    ]
-                ]
-            ]
+type alias Colors =
+    { lightGray : Color
+    , white : Color
+    , blue : Color
+    , darkGray : Color
+    }
 
 
-footer : El msg
-footer =
-    Element.footer Styles.Footer [] <|
-        container
-            [ row Styles.None
-                [ width fill
-                , verticalCenter
-                , paddingTop 24
-                , paddingBottom 32
-                ]
-                [ el Styles.Copyright [ paddingRight 0 ] (text "Ryan Haskell-Glatz, 2018")
-                , row Styles.None
-                    [ width fill
-                    , spacing 12
-                    , alignRight
-                    ]
-                    [ newTab "https://www.github.com/ryannhg" <|
-                        el Styles.Link [] (text "github")
-                    , newTab "https://www.twitter.com/Ryan_NHG" <|
-                        el Styles.Link [] (text "twitter")
-                    ]
-                ]
-            ]
+colors : Colors
+colors =
+    { lightGray = Color.rgb 240 240 240
+    , white = Color.white
+    , blue = Color.rgb 0 150 255
+    , darkGray = Color.rgb 50 50 50
+    }
 
 
-hero_ : List (El msg) -> SomeHero a -> El msg
-hero_ otherStuff { header, subheader } =
-    column Styles.Hero
-        [ alignLeft, width fill, paddingXY 0 128 ]
-        [ container
-            ([ h1 Styles.HeroHeader
-                []
-                (text header)
-             , h2 Styles.HeroSubheader
-                [ padding 2 ]
-                (text subheader)
-             ]
-                ++ otherStuff
-            )
+isActive : Page -> Page -> List (Attribute msg)
+isActive currentPage page =
+    if page == currentPage then
+        [ Font.color colors.blue
+        ]
+    else
+        [ Font.color colors.darkGray
         ]
 
 
-type alias SomeHero a =
-    { a
-        | header : String
-        , subheader : String
-    }
+container : Element msg -> Element msg
+container child =
+    el
+        [ width <| fillBetween { min = Nothing, max = Just 720 }
+        , centerX
+        ]
+        child
 
 
-type alias HeroStuff =
-    { header : String
-    , subheader : String
-    }
-
-
-type alias HeroWithLinkStuff =
-    { header : String
-    , subheader : String
-    , cta :
-        { link : String
-        , label : String
+borderBottom : Int -> Attribute msg
+borderBottom width =
+    Border.widthEach
+        { bottom = width
+        , left = 0
+        , right = 0
+        , top = 0
         }
+
+
+navbar : Device -> Page -> Element msg
+navbar device page =
+    container <|
+        row
+            [ Background.color colors.white
+            , padding 16
+            , spacing 8
+            , borderBottom 1
+            , Border.solid
+            , Border.color colors.lightGray
+            ]
+            [ link
+                ([ Font.semiBold
+                 ]
+                    ++ isActive page Homepage
+                )
+                { url = "/"
+                , label =
+                    text <|
+                        if tabletUp device then
+                            "ryan haskell-glatz."
+                        else
+                            "ryan."
+                }
+            , navLink page Projects "/projects" "projects."
+            , navLink page Thoughts "/thoughts" "thoughts."
+            ]
+
+
+navLink : Page -> Page -> String -> String -> Element msg
+navLink currentPage page url label =
+    link
+        ([ alignRight
+         ]
+            ++ isActive currentPage page
+        )
+        { url = url
+        , label = text label
+        }
+
+
+footer : Device -> Element msg
+footer device =
+    container <|
+        row [ paddingXY 16 32 ]
+            [ el
+                [ Font.size 16
+                , if tabletUp device then
+                    alignRight
+                  else
+                    centerX
+                ]
+              <|
+                row []
+                    [ text "This site is "
+                    , newTabLink [ Font.color colors.blue ]
+                        { url = "https://www.github.com/ryannhg/ryannhg"
+                        , label = text "open source"
+                        }
+                    , text " and built with elm!"
+                    ]
+            ]
+
+
+type alias Hero =
+    { title : String
+    , subtitle : String
     }
 
 
-hero : HeroStuff -> El msg
-hero =
-    hero_ []
+tabletUp : Device -> Bool
+tabletUp device =
+    device.width > 720
 
 
-heroWithLink : HeroWithLinkStuff -> El msg
-heroWithLink model =
-    hero_
-        [ row Styles.None
-            [ paddingTop 24 ]
-            [ link model.cta.link <|
-                el Styles.Button [ paddingXY 16 8 ] (text model.cta.label)
-            ]
+hero : Device -> Hero -> Element msg
+hero device { title, subtitle } =
+    column
+        [ Background.color colors.lightGray
+        , paddingXY 16
+            (if tabletUp device then
+                64
+             else
+                48
+            )
+        , height shrink
         ]
-        model
-
-
-container : List (El msg) -> El msg
-container innerContent =
-    row Styles.None
-        [ width fill, center, paddingXY 24 0 ]
-        [ column Styles.None
-            [ width fill, maxWidth (px 780) ]
-            innerContent
+        [ container <|
+            column
+                [ spacing 8
+                ]
+                [ el
+                    [ Font.size <|
+                        if tabletUp device then
+                            56
+                        else
+                            36
+                    , Font.semiBold
+                    , centerX
+                    ]
+                    (text title)
+                , el
+                    [ centerX
+                    , Font.size <|
+                        if tabletUp device then
+                            28
+                        else
+                            20
+                    ]
+                    (text subtitle)
+                ]
         ]
 
 
-blogListing : { title : String, posts : List Types.Post } -> El msg
-blogListing { title, posts } =
-    el Styles.Section [ paddingXY 0 48 ] <|
-        container
-            [ el Styles.SectionHeader [] (text title)
-            , column Styles.None
-                [ paddingTop 12 ]
-                (List.map
-                    (\{ title, url, date } ->
-                        column Styles.Listing
-                            [ paddingXY 0 20 ]
-                            [ link url <|
-                                el Styles.ListingHeader [] (text title)
-                            , el Styles.ListingSubheader [ paddingTop 6 ] (text date)
-                            ]
-                    )
-                    posts
-                )
-            ]
+pageStyles : List (Attribute msg)
+pageStyles =
+    [ Font.family
+        [ Font.external
+            { name = "Source Sans Pro"
+            , url = "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i"
+            }
+        , Font.sansSerif
+        ]
+    , Font.color colors.darkGray
+    ]

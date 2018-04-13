@@ -1,13 +1,22 @@
-module Routes exposing (page)
+module Routes exposing (page, parse)
 
-import Types exposing (Page(..))
 import Navigation exposing (Location)
+import Types exposing (Page(..))
 import UrlParser exposing (Parser)
+
+
+route : Parser (Page -> Page) Page
+route =
+    UrlParser.oneOf
+        [ UrlParser.map Homepage <| UrlParser.top
+        , UrlParser.map Projects <| UrlParser.s "projects"
+        , UrlParser.map Thoughts <| UrlParser.s "thoughts"
+        ]
 
 
 page : Location -> Page
 page location =
-    case UrlParser.parsePath route location of
+    case parse location of
         Just page ->
             page
 
@@ -15,8 +24,6 @@ page location =
             NotFound
 
 
-route : Parser (Page -> Page) Page
-route =
-    UrlParser.oneOf
-        [ UrlParser.map Homepage UrlParser.top
-        ]
+parse : Location -> Maybe Page
+parse location =
+    UrlParser.parsePath route location

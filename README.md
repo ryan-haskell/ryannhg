@@ -1,12 +1,12 @@
-# ryan-elm
+# ryannhg
 My personal website.
 
 
-### Try it locally
+### Local Development
 
-1. `npm i -g elm static-server chokidar`
+1. `npm install`
 
-1. `chokidar ./src -c "elm-make src/Main.elm --output public/index.html"`
+1. `npm run dev`
 
-1. Check out [http://localhost:8000/src/Main.elm](http://localhost:8000/src/Main.elm)
+1. Check out [http://localhost:9080](http://localhost:9080)!
 

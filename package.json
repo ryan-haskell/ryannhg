@@ -1,0 +1,31 @@
+{
+  "name": "ryannhg",
+  "version": "1.0.0",
+  "description": "My personal site!",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "elm-package install --yes",
+    "start": "static-server ./public -n ./public/index.html",
+    "build": "elm-make ./src/Main.elm --output ./public/app.js --debug",
+    "build:release": "elm-make ./src/Main.elm --output ./public/app.js",
+    "watch": "chokidar './src/**/*.elm' -c 'npm run build'",
+    "dev": "npm run watch & npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryannhg/ryan-elm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryannhg/ryan-elm/issues"
+  },
+  "homepage": "https://github.com/ryannhg/ryan-elm#readme",
+  "devDependencies": {
+    "chokidar": "^2.0.3",
+    "elm": "0.18.0"
+  },
+  "dependencies": {
+    "static-server": "^2.2.1"
+  }
+}

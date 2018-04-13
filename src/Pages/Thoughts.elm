@@ -1,4 +1,4 @@
-module Pages.Home exposing (view)
+module Pages.Thoughts exposing (view)
 
 import Element exposing (..)
 import Elements
@@ -7,6 +7,6 @@ import Elements
 view : Device -> Element msg
 view device =
     Elements.hero device
-        { title = "Hey, I'm Ryan."
-        , subtitle = "And I like coding things!"
+        { title = "Thoughts."
+        , subtitle = "A place to share ideas!"
         }
