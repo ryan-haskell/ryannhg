@@ -18,9 +18,9 @@ main =
     Navigation.program
         HandleLocation
         { init = init
-        , view = \model -> layout [] (view model)
+        , view = view >> layout []
         , update = update
-        , subscriptions = \model -> Window.resizes OnResize
+        , subscriptions = always (Window.resizes OnResize)
         }
 
 
@@ -42,7 +42,7 @@ update msg model =
             { model | location = location } ! []
 
         OnResize size ->
-            { model | device = Just <| Element.classifyDevice size } ! []
+            { model | device = Just (Element.classifyDevice size) } ! []
 
 
 view : Model -> Element Msg
