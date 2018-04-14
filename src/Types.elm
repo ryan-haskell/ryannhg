@@ -1,5 +1,7 @@
 module Types exposing (..)
 
+import Date exposing (Date)
+
 
 type Page
     = Homepage
@@ -10,6 +12,7 @@ type Page
 
 type alias Post =
     { title : String
-    , url : String
-    , date : String
+    , date : Date
+    , slug : String
+    , description : String
     }

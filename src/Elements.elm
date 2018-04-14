@@ -1,6 +1,8 @@
-module Elements exposing (footer, hero, navbar, pageStyles)
+module Elements exposing (colors, container, footer, formatDate, hero, navbar, pageStyles)
 
 import Color exposing (Color)
+import Date exposing (Date)
+import DateFormat
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -44,16 +46,6 @@ container child =
         child
 
 
-borderBottom : Int -> Attribute msg
-borderBottom width =
-    Border.widthEach
-        { bottom = width
-        , left = 0
-        , right = 0
-        , top = 0
-        }
-
-
 navbar : Device -> Page -> Element msg
 navbar device page =
     container <|
@@ -61,9 +53,6 @@ navbar device page =
             [ Background.color colors.white
             , padding 16
             , spacing 8
-            , borderBottom 1
-            , Border.solid
-            , Border.color colors.lightGray
             ]
             [ link
                 ([ Font.semiBold
@@ -179,3 +168,14 @@ pageStyles =
         ]
     , Font.color colors.darkGray
     ]
+
+
+formatDate : Date -> String
+formatDate =
+    DateFormat.format
+        [ DateFormat.monthNameFull
+        , DateFormat.text " "
+        , DateFormat.dayOfMonthSuffix
+        , DateFormat.text ", "
+        , DateFormat.yearNumber
+        ]
