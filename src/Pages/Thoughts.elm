@@ -1,16 +1,31 @@
 module Pages.Thoughts exposing (thoughts, view)
 
+import Date exposing (Date)
 import Element exposing (..)
 import Element.Border as Border
 import Element.Font as Font
 import Elements exposing (colors)
-import Pages.Thoughts.ElmIsEasy as ElmIsEasy
 import Types
 
 
-thoughts : List Types.Post
+parseDate : String -> Date
+parseDate string =
+    case Date.fromString string of
+        Ok date ->
+            date
+
+        Err reason ->
+            Debug.crash ("Could not format: " ++ string)
+
+
+thoughts : List Types.ThoughtMeta
 thoughts =
-    [ ElmIsEasy.post
+    [ { title = "Elm is simple."
+      , date = parseDate "2018-04-14T20:36:18"
+      , description = "And you are smart!"
+      , slug = "elm-is-simple"
+      , thought = Types.ElmIsSimple
+      }
     ]
 
 
@@ -33,8 +48,8 @@ viewThoughts device =
         )
 
 
-viewThought : Device -> Types.Post -> Element msg
-viewThought device post =
+viewThought : Device -> Types.ThoughtMeta -> Element msg
+viewThought device thought =
     link
         [ Border.solid
         , Border.color colors.lightGray
@@ -42,15 +57,15 @@ viewThought device post =
         , padding 32
         , width fill
         ]
-        { url = "/thoughts/" ++ post.slug
+        { url = "/thoughts/" ++ thought.slug
         , label =
             column [ spacing 4, mouseOver [ moveUp 2 ] ]
-                [ el [ Font.size 18 ] (text <| Elements.formatDate post.date)
+                [ el [ Font.size 18 ] (text <| Elements.formatDate thought.date)
                 , el
                     [ Font.color colors.blue
                     , Font.size 28
                     , Font.semiBold
                     ]
-                    (text post.title)
+                    (text thought.title)
                 ]
         }

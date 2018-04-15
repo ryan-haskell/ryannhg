@@ -7,12 +7,18 @@ type Page
     = Homepage
     | Projects
     | Thoughts
+    | ThoughtDetail ThoughtMeta
     | NotFound
 
 
-type alias Post =
+type Thought
+    = ElmIsSimple
+
+
+type alias ThoughtMeta =
     { title : String
     , date : Date
     , slug : String
     , description : String
+    , thought : Thought
     }

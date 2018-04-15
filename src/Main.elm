@@ -6,6 +6,7 @@ import Navigation exposing (Location)
 import Pages.Home
 import Pages.NotFound
 import Pages.Projects
+import Pages.ThoughtDetail
 import Pages.Thoughts
 import Routes
 import Task
@@ -71,6 +72,9 @@ viewPage device model =
 
         Thoughts ->
             Pages.Thoughts.view device
+
+        ThoughtDetail thought ->
+            Pages.ThoughtDetail.view device thought
 
         NotFound ->
             Pages.NotFound.view
