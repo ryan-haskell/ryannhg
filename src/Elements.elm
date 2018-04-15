@@ -37,10 +37,15 @@ isActive currentPage page =
         ]
 
 
+containerWidth : Int
+containerWidth =
+    640
+
+
 container : Element msg -> Element msg
 container child =
     el
-        [ width <| fillBetween { min = Nothing, max = Just 720 }
+        [ width <| fillBetween { min = Nothing, max = Just containerWidth }
         , centerX
         ]
         child
@@ -115,7 +120,7 @@ type alias Hero =
 
 tabletUp : Device -> Bool
 tabletUp device =
-    device.width > 720
+    device.width > containerWidth
 
 
 hero : Device -> Hero -> Element msg
