@@ -165,10 +165,7 @@ hero device { title, subtitle } =
 pageStyles : List (Attribute msg)
 pageStyles =
     [ Font.family
-        [ Font.external
-            { name = "Source Sans Pro"
-            , url = "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i"
-            }
+        [ Font.typeface "Source Sans Pro"
         , Font.sansSerif
         ]
     , Font.color colors.darkGray
