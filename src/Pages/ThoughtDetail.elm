@@ -11,7 +11,7 @@ view device thought =
     column []
         [ Elements.hero device
             { title = thought.title
-            , subtitle = thought.description
+            , subtitle = Elements.formatDate thought.date
             }
         , Elements.container <| el [ padding 16, width fill ] (viewContent device thought)
         ]
