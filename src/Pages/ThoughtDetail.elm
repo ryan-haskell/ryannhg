@@ -2,7 +2,8 @@ module Pages.ThoughtDetail exposing (view)
 
 import Element exposing (..)
 import Elements
-import Pages.Thoughts.ElmIsSimple
+import Markdown
+import Pages.Thoughts.ForLoopsAreUseless
 import Types exposing (Thought(..))
 
 
@@ -13,12 +14,19 @@ view device thought =
             { title = thought.title
             , subtitle = Elements.formatDate thought.date
             }
-        , Elements.container <| el [ padding 16, width fill ] (viewContent device thought)
+        , Elements.container <| el [ padding 16, width fill ] (viewContent thought)
         ]
 
 
-viewContent : Device -> Types.ThoughtMeta -> Element msg
-viewContent device thought =
-    case thought.thought of
-        ElmIsSimple ->
-            Pages.Thoughts.ElmIsSimple.view device thought
+viewThought : String -> Element msg
+viewThought content =
+    paragraph []
+        [ Element.html <| Markdown.toHtml [] content
+        ]
+
+
+viewContent : Types.ThoughtMeta -> Element msg
+viewContent { thought } =
+    case thought of
+        ForLoopsAreUseless ->
+            viewThought Pages.Thoughts.ForLoopsAreUseless.content

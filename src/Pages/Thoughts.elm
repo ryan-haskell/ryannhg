@@ -8,23 +8,19 @@ import Elements exposing (colors)
 import Types
 
 
-parseDate : String -> Date
-parseDate string =
-    case Date.fromString string of
-        Ok date ->
-            date
-
-        Err reason ->
-            Debug.crash ("Could not format: " ++ string)
+parseDate : Float -> Date
+parseDate =
+    Date.fromTime
 
 
 thoughts : List Types.ThoughtMeta
 thoughts =
-    [ { title = "Elm is simple."
-      , date = parseDate "2018-04-14T20:36:18"
-      , description = "And you are smart!"
-      , slug = "elm-is-simple"
-      , thought = Types.ElmIsSimple
+    [ { title = "For Loops are Useless"
+      , date = Date.fromTime 1525835345854.0
+      , description = "Working with lists in a slightly different way."
+      , slug = "for-loops-are-useless"
+      , tags = [ "es6", "javascript" ]
+      , thought = Types.ForLoopsAreUseless
       }
     ]
 

@@ -12,7 +12,7 @@ type Page
 
 
 type Thought
-    = ElmIsSimple
+    = ForLoopsAreUseless
 
 
 type alias ThoughtMeta =
@@ -20,5 +20,6 @@ type alias ThoughtMeta =
     , date : Date
     , slug : String
     , description : String
+    , tags : List String
     , thought : Thought
     }
