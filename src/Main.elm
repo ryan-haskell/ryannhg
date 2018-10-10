@@ -320,7 +320,7 @@ hero =
 
 In Elm UI, when I want things to stack I can use a `column`. When I want things side-by-side, I use a `row`. Behind the scenes, everything compiles to the cross-browser supported CSS.
 
-No more debugging an IE 11 CSS issues!
+No more debugging any IE 11 CSS issues!
 
 On top of that, it's really easy to keep track of colors used across the site because you can share variables between Elm (unlike variables across HTML, JS and CSS).
 
