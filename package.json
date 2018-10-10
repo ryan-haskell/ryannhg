@@ -1,31 +1,32 @@
 {
   "name": "ryannhg",
   "version": "1.0.0",
-  "description": "My personal site!",
+  "description": "my personal site!",
   "main": "index.js",
   "scripts": {
-    "postinstall": "elm-package install --yes",
-    "start": "static-server ./public -n ./public/index.html",
-    "build": "elm-make ./src/Main.elm --output ./public/app.js --debug",
-    "build:release": "elm-make ./src/Main.elm --output ./public/app.js",
-    "watch": "chokidar './src/**/*.elm' -c 'npm run build'",
-    "dev": "npm run watch & npm run start"
+    "build": "elm make src/Main.elm --output public/app.js",
+    "build:release": "elm make src/Main.elm --optimize --output public/app.js",
+    "watch:build": "npm run build && chokidar './src' -c 'npm run build'",
+    "serve": "serve public",
+    "dev": "npm run watch:build & npm run serve"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ryannhg/ryan-elm.git"
+    "url": "git+https://github.com/ryannhg/ryannhg.git"
   },
-  "author": "",
+  "keywords": [
+    "elm",
+    "website"
+  ],
+  "author": "Ryan Haskell-Glatz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ryannhg/ryan-elm/issues"
+    "url": "https://github.com/ryannhg/ryannhg/issues"
   },
-  "homepage": "https://github.com/ryannhg/ryan-elm#readme",
+  "homepage": "https://github.com/ryannhg/ryannhg#readme",
   "devDependencies": {
-    "chokidar": "^2.0.3",
-    "elm": "0.18.0"
-  },
-  "dependencies": {
-    "static-server": "^2.2.1"
+    "chokidar-cli": "^1.2.1",
+    "elm": "^0.19.0-bugfix2",
+    "serve": "^10.0.2"
   }
 }
