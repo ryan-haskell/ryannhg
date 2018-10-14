@@ -293,6 +293,105 @@ type alias Post =
 
 posts =
     [ Post
+        "Big things, tiny functions"
+        "big-things-tiny-functions"
+        [ "javascript", "es6", "functional" ]
+        (Time.millisToPosix 1539268876)
+        """
+## Functions can return things.
+
+Since I gave Elm a try, I've realized that's the only thing I want my functions to do! Every now and then in JavaScript, I'll make a side effect like printing to the console, saving an item in MongoDB, or rendering something on a webpage.
+
+But as much as possible, I try to make my JavaScript functions __take in some input__ and __return some output__.
+
+Building big stuff is easier when you can work with one step at a time. And if those steps are tiny functions, then it's easier to confirm that things are going smoothly in an incremental way.
+
+Let's go through a quick code challenge together: Make a function called `sluggify` that takes in an article title and returns a "slug", something we can use in the URL for that blog post.
+
+For example:
+
+```js
+sluggify('Hello') // hello
+sluggify('Hello World') // hello-world
+sluggify("Elm is cool!") // elm-is-cool
+```
+
+Before I learned about `map`, `filter`, and `reduce` in JavaScript, the code I would write for this would be in one multiline function.
+
+Now, I can write it one step at a time! Check it out:
+
+#### Step 1: Lowercase the letters
+
+```js
+const sluggify = words =>
+  words
+    .toLowerCase()
+```
+
+```js
+sluggify('Hello') // hello
+sluggify('Hello World') // hello world
+sluggify("Elm is cool!") // elm is cool!
+```
+
+#### Step 2: Remove special characters
+
+```js
+const sluggify = words =>
+  words
+    .toLowerCase()
+    .split('')
+    .filter(isLetterOrNumber)
+    .join('')
+
+const isLetterOrNumber = char => {
+  const getCode = char => char.getCharCodeAt(0)
+  const code = getCode(char)
+  const isLetter = code >= getCode('a') && code <= getCode('z')
+  const isNumber = code >= getCode('0') && code <= getCode('9')
+  return isLetter || isNumber
+}
+```
+```js
+sluggify('Hello') // hello
+sluggify('Hello World') // hello world
+sluggify("Elm is cool!") // elm is cool
+```
+
+#### Step 3. Convert spaces to dashes
+
+```js
+const sluggify = words =>
+  words
+    .toLowerCase()
+    .split('')
+    .filter(isLetterOrNumber)
+    .join('')
+    .split(' ').filter(notEmpty).join('-')
+
+const isLetterOrNumber = char => {
+  const getCode = char => char.getCharCodeAt(0)
+  const code = getCode(char)
+  const isLetter = code >= getCode('a') && code <= getCode('z')
+  const isNumber = code >= getCode('0') && code <= getCode('9')
+  return isLetter || isNumber
+}
+
+const notEmpty = char => char.length > 0
+```
+
+```js
+sluggify('Hello') // hello
+sluggify('Hello World') // hello-world
+sluggify("Elm is cool!") // elm-is-cool
+```
+
+And that's it! By breaking things down into small steps that just take input and return output, it's really easy to build bigger things!
+
+Give map, filter, and reduce a try! They're unfamiliar at first, but they really simplify the way you write functions in your JavaScript application.
+```
+"""
+    , Post
         "New site, new life!"
         "new-site-new-life"
         [ "elm", "web", "project" ]
