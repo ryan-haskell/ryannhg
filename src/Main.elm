@@ -296,7 +296,7 @@ posts =
         "Big things, tiny functions"
         "big-things-tiny-functions"
         [ "javascript", "es6", "functional" ]
-        (Time.millisToPosix 1539268876)
+        (Time.millisToPosix 1539493591688)
         """
 ## Functions can return things.
 
@@ -389,7 +389,6 @@ sluggify("Elm is cool!") // elm-is-cool
 And that's it! By breaking things down into small steps that just take input and return output, it's really easy to build bigger things!
 
 Give map, filter, and reduce a try! They're unfamiliar at first, but they really simplify the way you write functions in your JavaScript application.
-```
 """
     , Post
         "New site, new life!"
