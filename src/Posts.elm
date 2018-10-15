@@ -279,7 +279,7 @@ tripleMany([ 1, 2, 3 ]) // [ 3, 6, 9 ]
 
 In Elm, I'm not allowed to use a `for` loop, because it changes the value of `i` over time! Instead I had to learn about `List.map`.
 
-Map is __just another function__ takes in two inputs:
+Map is __just another function__ that takes in two inputs:
 
 1. The function to call on each item.
 2. Your list of items.
@@ -295,7 +295,7 @@ doubleMany [ 1, 2, 3 ] -- [ 2, 4, 6 ]
 tripleMany [ 1, 2, 3 ] -- [ 3, 6, 9 ]
 ```
 
-That's a lot less code, which is neat. But more importantly than saving lines of code, I'm not rewriting several lines of boilerplate, increasing the places I could have a type and hurting the overall scannability of my code to another developer. After getting comfortable with the syntax, I realized Javascript supports this, and it's even compatible with IE 9!
+That's a lot less code, which is neat. But more importantly than just saving lines of code, I'm not hiding the important stuff in boilerplate. That means I decrease the chances of a potential typo, while helping another developer understand my code. After getting comfortable with the syntax, I realized Javascript supports this, and it's even compatible with IE 9!
 
 ```js
 function double (num) {
