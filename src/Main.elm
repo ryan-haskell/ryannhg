@@ -10,7 +10,7 @@ import Element.Font as Font
 import Element.Region as Region
 import Html exposing (Html)
 import Html.Attributes as Attr
-import Markdown
+import Posts exposing (Post, posts)
 import Task
 import Time exposing (Zone)
 import Url exposing (Url)
@@ -192,15 +192,12 @@ notFoundPage =
 
 
 blogDetailPage : Model -> Post -> Element msg
-blogDetailPage { timezone } { title, time, content } =
+blogDetailPage { timezone } post =
     column
         [ width fill, sourceSansPro ]
         [ navbar
-        , hero { title = title, caption = format timezone time }
-        , el containerStyles <|
-            textColumn
-                [ Element.htmlAttribute (Attr.class "markdown") ]
-                (List.map Element.html (Markdown.toHtml Nothing content))
+        , hero { title = post.title, caption = format timezone post.time }
+        , el containerStyles <| Posts.view post
         , footer
         ]
 
@@ -282,216 +279,6 @@ hero { title, caption } =
             ]
 
 
-type alias Post =
-    { title : String
-    , slug : String
-    , tags : List String
-    , time : Time.Posix
-    , content : String
-    }
-
-
-posts =
-    [ Post
-        "Big things, tiny functions"
-        "big-things-tiny-functions"
-        [ "javascript", "es6", "functional" ]
-        (Time.millisToPosix 1539493591688)
-        """
-## Functions can return things.
-
-Since I gave Elm a try, I've realized that's the only thing I want my functions to do! Every now and then in JavaScript, I'll make a side effect like printing to the console, saving an item in MongoDB, or rendering something on a webpage.
-
-But as much as possible, I try to make my JavaScript functions __take in some input__ and __return some output__.
-
-Building big stuff is easier when you can work with one step at a time. And if those steps are tiny functions, then it's easier to confirm that things are going smoothly in an incremental way.
-
-Let's go through a quick code challenge together: Make a function called `sluggify` that takes in an article title and returns a "slug", something we can use in the URL for that blog post.
-
-For example:
-
-```js
-sluggify('Hello') // hello
-sluggify('Hello World') // hello-world
-sluggify("Elm is cool!") // elm-is-cool
-```
-
-Before I learned about `map`, `filter`, and `reduce` in JavaScript, the code I would write for this would be in one multiline function.
-
-Now, I can write it one step at a time! Check it out:
-
-#### Step 1: Lowercase the letters
-
-```js
-const sluggify = words =>
-  words
-    .toLowerCase()
-```
-
-```js
-sluggify('Hello') // hello
-sluggify('Hello World') // hello world
-sluggify("Elm is cool!") // elm is cool!
-```
-
-#### Step 2: Remove special characters
-
-```js
-const sluggify = words =>
-  words
-    .toLowerCase()
-    .split('')
-    .filter(isLetterOrNumber)
-    .join('')
-
-const isLetterOrNumber = char => {
-  const getCode = char => char.getCharCodeAt(0)
-  const code = getCode(char)
-  const isLetter = code >= getCode('a') && code <= getCode('z')
-  const isNumber = code >= getCode('0') && code <= getCode('9')
-  return isLetter || isNumber
-}
-```
-```js
-sluggify('Hello') // hello
-sluggify('Hello World') // hello world
-sluggify("Elm is cool!") // elm is cool
-```
-
-#### Step 3. Convert spaces to dashes
-
-```js
-const sluggify = words =>
-  words
-    .toLowerCase()
-    .split('')
-    .filter(isLetterOrNumber)
-    .join('')
-    .split(' ').filter(notEmpty).join('-')
-
-const isLetterOrNumber = char => {
-  const getCode = char => char.getCharCodeAt(0)
-  const code = getCode(char)
-  const isLetter = code >= getCode('a') && code <= getCode('z')
-  const isNumber = code >= getCode('0') && code <= getCode('9')
-  return isLetter || isNumber
-}
-
-const notEmpty = char => char.length > 0
-```
-
-```js
-sluggify('Hello') // hello
-sluggify('Hello World') // hello-world
-sluggify("Elm is cool!") // elm-is-cool
-```
-
-And that's it! By breaking things down into small steps that just take input and return output, it's really easy to build bigger things!
-
-Give map, filter, and reduce a try! They're unfamiliar at first, but they really simplify the way you write functions in your JavaScript application.
-"""
-    , Post
-        "New site, new life!"
-        "new-site-new-life"
-        [ "elm", "web", "project" ]
-        (Time.millisToPosix 1539137597759)
-        """
-## Elm is neat.
-
-I just built this entire site with it! Alright, I guess there's a bit of HTML, CSS, and JS too. But that's just the glue to attach the Elm to everything.
-
-_The coolest part?_ I built all of this with almost zero CSS! Using the `elm-ui` package, I was able to layout this page in terms of normal things, like "rows" and "columns". Not "divs" and "spans".
-
-Let's take a look at what the homepage hero looks like in Elm UI:
-
-```elm
-hero =
-    column
-        [ padding 32
-        , Font.color white
-        , Background.color blue
-        ]
-        [ text "ryan."
-        , text "i like coding things!"
-        ]
-```
-
-In Elm UI, when I want things to stack I can use a `column`. When I want things side-by-side, I use a `row`. Behind the scenes, everything compiles to the cross-browser supported CSS.
-
-No more debugging any IE 11 CSS issues!
-
-On top of that, it's really easy to keep track of colors used across the site because you can share variables between Elm (unlike variables across HTML, JS and CSS).
-
-```elm
-white : Color
-white =
-    rgb 1 1 1
-
-blue : Color
-blue =
-    rgb255 0 100 175
-
-hero : Element a
-hero =
-    column
-        [ padding 32
-        , Font.color white
-        , Background.color blue
-        ]
-        [ text "ryan."
-        , text "i like coding things!"
-        ]
-```
-
-With elm, making something like `hero` a partial that can take in different kinds of inputs is super-easy too. This is because everything in Elm is already a function. We can pass in the title and caption as string inputs!
-
-
-```elm
-white : Color
-white =
-    rgb 1 1 1
-
-blue : Color
-blue =
-    rgb255 0 100 175
-
-type alias HeroContent =
-    { title : String
-    , caption : String
-    }
-
-hero : HeroContent -> Element a
-hero content =
-    column
-        [ padding 32
-        , Font.color white
-        , Background.color blue
-        ]
-        [ text content.title
-        , text content.caption
-        ]
-
-homepageHero : Element a
-homepageHero =
-    hero
-        { title = "ryan."
-        , caption = "i like coding things!"
-        }
-
-blogDetailHero : BlogPost -> Element a
-blogDetailHero post =
-    hero
-        { title = post.title
-        , caption = post.date
-        }
-```
-
-If you want to learn more, check out [the repo here](https://github.com/mdgriffith/elm-ui)! Building websites without CSS is a great way to learn Elm's non-C-style syntax!
-
-"""
-    ]
-
-
 latestPosts : Zone -> Element msg
 latestPosts timezone =
     el ([] ++ containerStyles) <|
@@ -544,12 +331,6 @@ format zone =
         , DateFormat.dayOfMonthSuffix
         , DateFormat.text ", "
         , DateFormat.yearNumber
-
-        -- , DateFormat.text " at "
-        -- , DateFormat.hourNumber
-        -- , DateFormat.text ":"
-        -- , DateFormat.minuteFixed
-        -- , DateFormat.amPmLowercase
         ]
         zone
 
@@ -570,8 +351,8 @@ footer =
             , paddingXY 0 32
             , width fill
             ]
-            [ text "Built by Ryan, made with "
-            , newTabLink linkStyles { url = "https://elm-lang.org", label = text "Elm!" }
+            [ text "Built by Ryan, "
+            , newTabLink linkStyles { url = "https://www.github.com/ryannhg/ryannhg", label = text "made with Elm!" }
             , row [ spacing 16, alignRight ]
                 [ newTabLink linkStyles
                     { url = "https://www.github.com/ryannhg", label = text "Github" }
