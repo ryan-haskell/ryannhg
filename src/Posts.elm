@@ -149,11 +149,11 @@ add a b = a + b
 When I took my first steps in programming, for loops were this magical thing that turned this code:
 
 ```java
-System.out.println("1");
-System.out.println("2");
-System.out.println("3");
-System.out.println("4");
-System.out.println("5");
+System.out.println(1);
+System.out.println(2);
+System.out.println(3);
+System.out.println(4);
+System.out.println(5);
 ```
 
 into this code:
@@ -261,14 +261,14 @@ function triple (num) {
 function doubleMany (nums) {
   var doubledNums = [];
   for (var i = 0; i < nums.length; i++) {
-    doubledNums = double(nums[i]);
+    doubledNums[i] = double(nums[i]);
   }
   return doubledNums;
 }
 function tripleMany (nums) {
   var tripledNums = [];
   for (var i = 0; i < nums.length; i++) {
-    tripledNums = triple(nums[i]);
+    tripledNums[i] = triple(nums[i]);
   }
   return tripledNums;
 }
